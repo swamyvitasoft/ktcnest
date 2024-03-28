@@ -10,8 +10,11 @@ export const SalesSchema = new Schema({
      imei: String,
      estimatedamount: Number,
      advanceamount: Number,
-     balaceamount: Number
-});
+     balaceamount: Number,
+    
+},
+     {timestamps:true}
+);
 
 export interface Sales extends Document {
      fullname: String;
