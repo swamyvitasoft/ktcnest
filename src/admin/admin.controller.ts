@@ -18,8 +18,8 @@ export class AdminController {
 
     @Post('login')
     async login(@Body() adminLoginDto: AdminDto): Promise<any> {
-        const token = await this.adminService.login(adminLoginDto.mobileno, adminLoginDto.password);
-        return { token,adminLoginDto };
+        const {admin,token} = await this.adminService.login(adminLoginDto.mobileno, adminLoginDto.password);
+        return { admin,token };
     }
  
     @Get()

@@ -17,12 +17,11 @@ export class AdminService {
         return createAdmin.save()
     }
 
-    async login(mobileno: string, password: string): Promise<string> {
+    async login(mobileno: string, password: string): Promise<{token:string,admin:Admin}> {
         const admin: Admin = await this.adminModel.findOne({ mobileno,password }).exec();
-
         const secretKey = 'my-secretKey';
-        const token = jwt.sign({ mobileno: admin.mobileno, password: admin.password }, secretKey, { expiresIn: '1h' });
-        return token;
+        const token = jwt.sign({ mobileno: admin.mobileno, password: admin.password }, secretKey, { expiresIn: '8h' });
+        return {admin,token};
     }
 
     async findAll(): Promise<Admin []>{
