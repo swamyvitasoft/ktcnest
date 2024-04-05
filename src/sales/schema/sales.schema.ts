@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export const SalesSchema = new Schema({
+     sno: Number,
      fullname: String,
      address: String,
      mobileno: String,
@@ -11,12 +12,15 @@ export const SalesSchema = new Schema({
      estimatedamount: Number,
      advanceamount: Number,
      balaceamount: Number,
+     status: String,
+
     
 },
      {timestamps:true}
 );
 
 export interface Sales extends Document {
+     sno: Number,
      fullname: String;
      address: String;
      mobileno: String;
@@ -27,4 +31,5 @@ export interface Sales extends Document {
      estimatedamount: Number;
      advanceamount: Number;
      balaceamount: Number;
+     status: String,
 }

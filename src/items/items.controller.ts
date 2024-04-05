@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { ItemsService } from './items.service';
-import { ItemsDto } from '../admin/items.dto';
+import { ItemsDto } from '../items/dto/items.dto';
 import { Items } from './schema/items.schema';
 import { verifyToken } from '../jwt/verifyToken';
 
@@ -10,7 +10,7 @@ export class ItemsController {
     constructor(private readonly itemsService: ItemsService) {}
 
  @Post()
- @UseGuards(verifyToken)
+  @UseGuards(verifyToken)
  async create(@Body() itemsDto: ItemsDto): Promise<Items> {
    return this.itemsService.create(itemsDto);
  }

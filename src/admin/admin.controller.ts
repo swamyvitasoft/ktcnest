@@ -41,4 +41,11 @@ export class AdminController {
     async remove(@Param('id') id:string):Promise<void>{
         await this.adminService.remove(id)
     }
+
+    @Post('forgot-login')
+    async forgotLogin(@Body('mobileno') mobileno: string): Promise<any> {
+        await this.adminService.forgotLogin(mobileno);
+        return { message: 'Email sent successfully' };
+    }
+    
 }

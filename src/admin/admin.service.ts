@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { AdminDto } from './dto/admin.dto';
 import { Admin } from './schema/admin.schema';
 import * as jwt from 'jsonwebtoken';
-
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class AdminService {
@@ -38,5 +38,33 @@ export class AdminService {
 
     async remove(id:string): Promise<void>{
         await this.adminModel.findByIdAndDelete(id).exec()
+    }
+
+    async forgotLogin(mobileno: string): Promise<void> {
+        const admin: Admin = await this.adminModel.findOne({ mobileno }).exec();
+        if (!admin) {
+            throw new Error('Admin not found');
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'gantasandhyavitasoft@gmail.com',
+                pass: 'fbkh uzzr zxij ywuv',
+            },
+        });
+        const mailOptions = {
+            from: 'gantasandhyavitasoft@gmail.com',
+            to: 'sudhakar.vita99@gmail.com',
+            subject: `Your ktc mobilepassword: ${admin.mobileno}`,
+            text: `Your password is: ${admin.password}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                throw new Error('Error sending email');
+            }
+            console.log('Email sent successfully!');
+        });
     }
 }
