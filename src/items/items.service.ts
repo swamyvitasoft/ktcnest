@@ -26,7 +26,8 @@ export class ItemsService {
         return this.itemsModel.findByIdAndUpdate(id, itemsDto, { new: true }).exec();
       }
     
-      async remove(id: string,): Promise<void> {
-        await this.itemsModel.findByIdAndDelete(id).exec();
+      async remove(id: string,): Promise<any> {
+        const deleteItem = await this.itemsModel.findByIdAndDelete(id).exec();
+        return deleteItem
       }
 }

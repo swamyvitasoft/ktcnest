@@ -1,17 +1,53 @@
 import mongoose from "mongoose";
+import { IsNotEmpty, IsString, IsNumber, IsMongoId } from 'class-validator';
 
 export class SalesDto {
-    readonly sno: Number;
-    readonly fullname: string;
-    readonly address: string;
-    readonly mobileno: string;
-    readonly particulars: string;
-    readonly itemId:mongoose.Schema.Types.ObjectId;
-    readonly note: string;
-    readonly imei: string;
-    readonly estimatedamount: Number;
-    readonly advanceamount: Number;
-    readonly balaceamount: Number;
-    readonly status: string;
+    @IsNotEmpty()
+  @IsNumber()
+  sno: number;
+
+  @IsNotEmpty()
+  @IsString()
+  fullname: string;
+
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsString()
+  mobileno: string;
+
+  @IsNotEmpty()
+  @IsString()
+  particulars: string;
+
+  @IsNotEmpty()
+  @IsMongoId()
+  itemId: string; // As itemId is of type mongoose.Schema.Types.ObjectId in your schema, it's a string in TypeScript
+
+  @IsNotEmpty()
+  @IsString()
+  note: string;
+
+  @IsNotEmpty()
+  @IsString()
+  imei: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  estimatedamount: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  advanceamount: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  balaceamount: number;
+
+  @IsNotEmpty()
+  @IsString()
+  status: string;
 
 }

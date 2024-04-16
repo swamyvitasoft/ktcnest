@@ -1,9 +1,14 @@
 import { Schema, Document } from 'mongoose';
 
 export const ItemsSchema = new Schema({
-     itemname:String,
-     status:String
- 
+     itemname:{
+          type:String,
+          required:true
+     },    
+     status:{
+          type:String,
+          required:true
+     }
 },
 {timestamps:true}
 );

@@ -36,8 +36,9 @@ export class AdminService {
         return this.adminModel.findByIdAndUpdate(id,admindto,{new:true}).exec()
     }
 
-    async remove(id:string): Promise<void>{
-        await this.adminModel.findByIdAndDelete(id).exec()
+    async remove(id:string): Promise<any>{
+        const  Admin = await this.adminModel.findByIdAndDelete(id).exec()
+        return { Admin}
     }
 
     async forgotLogin(mobileno: string): Promise<void> {

@@ -1,5 +1,12 @@
+import { IsNotEmpty, IsString, IsNumber, IsMongoId } from 'class-validator';
+
 export class ItemsDto {
-    readonly itemname: string;
-    readonly status: string;    
+    @IsNotEmpty()
+    @IsString()
+    itemname: string;
+   
+    @IsNotEmpty()
+    @IsString()
+    status: string;
     
 }

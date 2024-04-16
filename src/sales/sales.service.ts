@@ -26,46 +26,34 @@ export class SalesService {
         return this.salesModel.findByIdAndUpdate(id, salesDto, { new: true }).exec();
       }
     
-      async remove(id: string,): Promise<void> {
-        await this.salesModel.findByIdAndDelete(id).exec();
+      async remove(id: string,): Promise<any> {
+       const delatedSale = await this.salesModel.findByIdAndDelete(id).exec();
+       return delatedSale
       }
 
-//       async getTopSales(): Promise<any> {
-//         try {
-//             const topSales = await this.salesModel.aggregate([
-//                 {
-//                     $match: {
-//                         status: "active",
-//                     },
-//                 },
-//                 {
-//                   $group: {
-//                       _id: "$itemId",
-//                       count: {
-//                           $sum: 1,
-//                       },
-//                       totalAdvanceAmount: {
-//                           $sum: "$advanceamount",
-//                       },
-//                       totalEstimatedAmount: {
-//                           $sum: "$estimatedamount",
-//                       },
-//                       totalBalanceAmount: {
-//                           $sum: "$balaceamount",
-//                       },
-//                   },
-//               },
-//               {
-//                 $sort: {
-//                     count: -1,
-//                 },
-//             },
-//         ]);
-//         return topSales;
-//     } catch (err) {
-//         throw new Error('Sales not found');
-//     }
-// }
+      async totalSales(): Promise<any> {
+        try {
+            const totalSales = await this.salesModel.aggregate([
+                {
+                    $match: {
+                        status: "active",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "items",
+                        localField: "itemId",
+                        foreignField: "_id",
+                        as: "items",
+                    },
+              },
+             
+        ]);
+        return totalSales;
+    } catch (err) {
+        throw new Error('Sales not found');
+    }
+}
 
 
 async getTopSales(): Promise<any> {
