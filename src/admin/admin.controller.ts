@@ -1,82 +1,120 @@
-import { Controller,Post,Get,Put,Delete,Body,Param, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Param,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminDto } from './dto/admin.dto';
 import { Admin } from './schema/admin.schema';
 
-
 @Controller('admin')
 export class AdminController {
-    constructor(
-        readonly adminService:AdminService,
-        
-        ){}
+  constructor(readonly adminService: AdminService) {}
 
-    @Post()
-    async create(@Body() adminDto:AdminDto): Promise<any>{
-        try{
-            const newAdmin = await this.adminService.create(adminDto)
-            return{newAdmin}
-        }catch(error){
-            throw new HttpException({error:'admin creation failed'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }       
+  @Post()
+  async create(@Body() adminDto: AdminDto): Promise<Admin> {
+    try {
+      return await this.adminService.create(adminDto);
+    } catch (error) {
+      throw new InternalServerErrorException('admin creation failed');
     }
+  }
 
-    @Post('login')
-    async login(@Body() adminLoginDto: AdminDto): Promise<any> {
-        try{
-            const {admin,token} = await this.adminService.login(adminLoginDto.mobileno, adminLoginDto.password);
-            return { admin,token };
-        }catch(error){
-            throw new HttpException({error:'login failed'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }       
+  @Get()
+  async findAll(): Promise<Admin[]> {
+    try {
+      return await this.adminService.findAll();
+    } catch (error) {
+      throw new InternalServerErrorException('Could not fetch admin.');
     }
- 
-    @Get()
-    async findAll(): Promise<any>{
-        try{
-            const allAdmins = await this.adminService.findAll()
-            return { allAdmins }
-        }catch(error){
-            throw new HttpException( {error:'admins not found'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-        
-    }
+  }
 
-    @Get(':id')
-    async findOne(@Param('id') id:string):Promise<any>{
-        try{
-            const Admin = await this.adminService.findOne(id);
-            return { Admin }
-        }catch(error){
-            throw new HttpException( {error:'admin not found'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-        
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Admin> {
+    try {
+      const Admin = await this.adminService.findOne(id);
+      if (!Admin) {
+        throw new NotFoundException('Admin not found.');
+      }
+      return Admin;
+    } catch (error) {
+      if (error.status === 404) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Could not fetch admin.');
     }
+  }
 
-    @Put(':id')
-    async update(@Param('id') id:string,@Body() adminDto:AdminDto): Promise<any>{
-        try{
-          const Admin = await this.adminService.update(id,adminDto)
-          return { Admin}
-        }catch(error){
-            throw new HttpException({error:'admin update failed'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }     
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() adminDto: AdminDto,
+  ): Promise<Admin> {
+    try {
+      const Admin = await this.adminService.update(id, adminDto);
+      if (!Admin) {
+        throw new NotFoundException('Admin not found.');
+      }
+      return Admin;
+    } catch (error) {
+      if (error.status === 404) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Could not update Admin.');
     }
+  }
 
-    @Delete(':id')
-    async remove(@Param('id') id:string):Promise<any>{
-        try{
-           const {Admin} = await this.adminService.remove(id)
-           return { Admin}
-        }catch(error){
-            throw new HttpException({error:'admin delete failed'},HttpStatus.INTERNAL_SERVER_ERROR)
-        }   
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<Admin> {
+    try {
+      const Admin = await this.adminService.delete(id);
+      if (!Admin) {
+        throw new NotFoundException('Admin not found.');
+      }
+      return Admin;
+    } catch (error) {
+      if (error.status === 404) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Could not delete admin.');
     }
+  }
 
-    @Post('forgotpassword')
-    async forgotLogin(@Body('mobileno') mobileno: string): Promise<any> {
-        await this.adminService.forgotLogin(mobileno);
-        return { message: 'Email sent successfully' };
+  @Post('login')
+  async login(@Body() adminLoginDto: AdminDto): Promise<any> {
+    try {
+      const { token, admin } = await this.adminService.login(adminLoginDto);
+      if (!admin) {
+        throw new NotFoundException('Admin not found.');
+      }
+      return { token, admin };
+    } catch (error) {
+      if (error.status === 404) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Could not find admin details.');
     }
-    
+  }
+
+  @Post('forgotpassword')
+  async forgotLogin(@Body('mobileno') mobileno: string): Promise<any> {
+    try {
+      const Admin = await this.adminService.forgotLogin(mobileno);
+      if (!Admin) {
+        throw new NotFoundException('Admin not found.');
+      }
+      return Admin;
+    } catch (error) {
+      if (error.status === 404) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Email not sent.');
+    }
+  }
 }
