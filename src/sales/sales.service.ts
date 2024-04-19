@@ -97,13 +97,13 @@ export class SalesService {
     ]);
   }
 
-  async daysales(): Promise<any> {
+  async daysales(month: any, year: any): Promise<any> {
     return await this.salesModel.aggregate([
       {
         $match: {
           createdAt: {
-            $gte: new Date('Thu, 01 Apr 2024 00:00:00 GMT'),
-            $lt: new Date('Fri, 01 May 2024 00:00:00 GMT'),
+            $gte: new Date(year, month - 1, 1),
+            $lt: new Date(year, month, 1),
           },
         },
       },
@@ -139,13 +139,13 @@ export class SalesService {
     ]);
   }
 
-  async monthsales(): Promise<any> {
+  async monthsales(fromYear: any, nextYear: any): Promise<any> {
     return await this.salesModel.aggregate([
       {
         $match: {
           createdAt: {
-            $gte: new Date('Mon, 01 Jan 2024 00:00:00 GMT'),
-            $lt: new Date('Wed, 01 Jan 2025 00:00:00 GMT'),
+            $gte: new Date(fromYear, 0, 1),
+            $lt: new Date(nextYear, 0, 1),
           },
         },
       },

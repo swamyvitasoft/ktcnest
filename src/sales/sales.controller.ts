@@ -110,9 +110,10 @@ export class SalesController {
 
   @Post('daysales')
   @UseGuards(verifyToken)
-  async daySales(): Promise<any> {
+  async daySales(@Body() body): Promise<any> {
     try {
-      return this.salesService.daysales();
+      const { month, year } = body;
+      return this.salesService.daysales(month, year);
     } catch (error) {
       throw new InternalServerErrorException('sales not found.');
     }
@@ -120,9 +121,10 @@ export class SalesController {
 
   @Post('monthsales')
   @UseGuards(verifyToken)
-  async monthSales(): Promise<any> {
+  async monthSales(@Body() body): Promise<any> {
     try {
-      return this.salesService.monthsales();
+      const { fromYear, nextYear } = body;
+      return this.salesService.monthsales(fromYear, nextYear);
     } catch (error) {
       throw new InternalServerErrorException('sales not found.');
     }
