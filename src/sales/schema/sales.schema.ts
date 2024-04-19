@@ -3,7 +3,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 export const SalesSchema = new Schema({
      sno:{
           type:Number,
-          required:true
+          required:true,
+          unique:true
      },
      fullname:{
           type:String,
