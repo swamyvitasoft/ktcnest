@@ -7,9 +7,15 @@ import { ItemsModule } from './items/items.module';
 import { AdminModule } from './admin/admin.module';
 import { ProductsModule } from './products/products.module';
 import * as cors from 'cors';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'uploads'),
+            serveRoot: '/uploads',
+        }),
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/ktcnest'),
     SalesModule,
     ItemsModule,
