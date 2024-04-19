@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { IsNotEmpty, IsString, IsNumber, IsMongoId } from 'class-validator';
 
 export class SalesDto {

@@ -9,13 +9,11 @@ import {
   UseGuards,
   InternalServerErrorException,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { ItemsDto } from '../items/dto/items.dto';
 import { Items } from './schema/items.schema';
 import { verifyToken } from '../jwt/verifyToken';
-import { validate } from 'class-validator';
 
 @Controller('items')
 export class ItemsController {
@@ -25,10 +23,6 @@ export class ItemsController {
   @UseGuards(verifyToken)
   async create(@Body() itemsDto: ItemsDto): Promise<Items> {
     try {
-      const errors = await validate(itemsDto);
-      if (errors.length > 0) {
-        throw new BadRequestException('Validation failed.');
-      }
       return await this.itemsService.create(itemsDto);
     } catch (error) {
       throw new InternalServerErrorException('item adding failed');
@@ -69,10 +63,6 @@ export class ItemsController {
     @Body() itemsDto: ItemsDto,
   ): Promise<Items> {
     try {
-      const errors = await validate(itemsDto);
-      if (errors.length > 0) {
-        throw new BadRequestException('Validation failed.');
-      }
       const updateItem = await this.itemsService.update(id, itemsDto);
       if (!updateItem) {
         throw new NotFoundException('item not found.');

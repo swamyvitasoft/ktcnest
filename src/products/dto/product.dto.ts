@@ -1,5 +1,14 @@
-export class ProductDto{
-    readonly productname:string;
-    readonly price:number;
-    readonly image:string;
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+export class ProductDto {
+  @IsNotEmpty()
+  @IsString()
+  productname: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @IsNotEmpty()
+  @IsString()
+  image: string;
 }

@@ -7,8 +7,6 @@ import {
   Put,
   Delete,
   UseGuards,
-  HttpException,
-  HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   BadRequestException,
@@ -27,10 +25,6 @@ export class SalesController {
   @UseGuards(verifyToken)
   async create(@Body() salesDto: SalesDto): Promise<Sales> {
     try {
-      const errors = await validate(salesDto);
-      if (errors.length > 0) {
-        throw new BadRequestException('Validation failed.');
-      }
       return await this.salesService.create(salesDto);
     } catch (error) {
       throw new InternalServerErrorException('sale adding failed');
@@ -54,10 +48,6 @@ export class SalesController {
     @Body() salesDto: SalesDto,
   ): Promise<Sales> {
     try {
-      const errors = await validate(salesDto);
-      if (errors.length > 0) {
-        throw new BadRequestException('Validation failed.');
-      }
       const Sale = await this.salesService.update(id, salesDto);
       if (!Sale) {
         throw new NotFoundException('Sale not found.');
