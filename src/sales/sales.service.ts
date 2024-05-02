@@ -105,37 +105,46 @@ export class SalesService {
             $gte: new Date(year, month - 1, 1),
             $lt: new Date(year, month, 1),
           },
+          status: 'active',
         },
       },
       {
-        $group: {
-          _id: {
-            $month: '$createdAt',
-          },
-          createdAt: {
-            $first: '$createdAt',
-          },
-          totalEstimatedAmount: {
-            $sum: '$estimatedamount',
-          },
-          totalAdvanceAmount: {
-            $sum: '$advanceamount',
-          },
-          totalBalanceAmount: {
-            $sum: '$balaceamount',
-          },
+        $lookup: {
+          from: 'items',
+          localField: 'itemId',
+          foreignField: '_id',
+          as: 'items',
         },
       },
-      {
-        $project: {
-          _id: 0,
-          month: '$_id',
-          createdAt: 1,
-          totalEstimatedAmount: 1,
-          totalAdvanceAmount: 1,
-          totalBalanceAmount: 1,
-        },
-      },
+      // {
+      //   $group: {
+      //     _id: {
+      //       $month: '$createdAt',
+      //     },
+      //     createdAt: {
+      //       $first: '$createdAt',
+      //     },
+      //     totalEstimatedAmount: {
+      //       $sum: '$estimatedamount',
+      //     },
+      //     totalAdvanceAmount: {
+      //       $sum: '$advanceamount',
+      //     },
+      //     totalBalanceAmount: {
+      //       $sum: '$balaceamount',
+      //     },
+      //   },
+      // },
+      // {
+      //   $project: {
+      //     _id: 0,
+      //     month: '$_id',
+      //     createdAt: 1,
+      //     totalEstimatedAmount: 1,
+      //     totalAdvanceAmount: 1,
+      //     totalBalanceAmount: 1,
+      //   },
+      // },
     ]);
   }
 

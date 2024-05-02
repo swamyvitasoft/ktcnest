@@ -35,7 +35,7 @@ export class AdminService {
 
   async login(admindto: AdminDto): Promise<{ token: string; admin: Admin }> {
     const secretKey = 'my-secretKey';
-    const token = jwt.sign(admindto, secretKey, { expiresIn: '8h' });
+    const token = jwt.sign(admindto, secretKey, { expiresIn: '365d' });
     const admin = await this.adminModel.findOne(admindto).exec();
     return { token, admin };
   }
